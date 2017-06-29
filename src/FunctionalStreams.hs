@@ -1,3 +1,4 @@
+{-# LANGUAGE TypeFamilies #-}
 module FunctionalStreams
 where
 
@@ -91,12 +92,12 @@ instance Applicative Stream where
 
 -- | The stream of fibonacci numbers.
 fibS :: Stream Integer
-fibS = _fibS 0 []
-
-_fibS :: Integer -> [Integer] -> Stream Integer
-_fibS 0 lst = 0 :> _fibS 1 (0:lst)
-_fibS 1 lst = 1 :> _fibS 2 (1:lst)
-_fibS n lst = let x = head lst + head (tail lst) in x :> _fibS (n + 1) (x:lst)
+fibS = _fibS 0
+    where
+        _fibS :: Integer -> Stream Integer
+        _fibS 0 = 0 :> _fibS 1
+        _fibS 1 = 1 :> _fibS 2
+        _fibS n = (headS (_fibS (n - 2)) + headS (_fibS (n - 1))) :> _fibS (n + 1)
 
 -- | The stream of prime numbers.
 primeS :: Stream Integer
@@ -108,4 +109,3 @@ _primeS n lst =
     if all (\x -> n `mod` x /= 0) lst
         then n :> _primeS (n + 2) (n:lst)
         else _primeS (n + 2) lst
-

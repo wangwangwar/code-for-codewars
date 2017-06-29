@@ -17,6 +17,8 @@ import           FiveFundamentalMonads
 import           Control.Applicative
 import           FunctionalStreams
 
+import           HuffmanEncoding
+
 
 main = hspec $ do
 
@@ -119,9 +121,7 @@ main = hspec $ do
 
     describe "sequences" $ do
         it "fibonacci sequence" $ do
-          print $ show $ takeS 10000 fibS
           takeS 4 fibS `shouldBe` [0, 1, 1, 2]
         it "prime sequence" $ do
-          print $ show $ takeS 10000 $ _primeS 2 []
           takeS 10 primeS `shouldBe` [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
 
